@@ -1,56 +1,26 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User_schema = mongoose.Schema({
-    name:{
-        type: String,
-    },
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
+const RegSchema =mongoose.Schema({
+    name:String,
     email:{
-        type: String,
-        unique: true
+       type: String,
+       unique: true
     },
+    address:String,
+    password:String,
+    time:{type:Date, default:Date.now}
 
-    address:{
-        type: String,
-    },
 
-    password:{
-        type: String,
-    },
-
-    tokens:{
-        token:{
-            type: String,
-            required: true
-        }
-    }
 })
-User_schema.methods.generateAuthToken = async function(){
-    try {
-        const token = jwt.sign({_id:this._id}, "fdgdfgggggggggggggggggg");
-        this.tokens = Object.assign(this.tokens, {token:token})
-        await this.save();
-        return token;
-
-        
-    } catch (error) {
-        console.error(error)
-    }
-
-}
-
-
-User_schema.pre("save",async function(next){
-    if(this.isModified("password")){
+RegSchema.pre("save",async function(next) {
+    if(this.isModified("password")) {
         const hash_password = await bcrypt.hash(this.password,10);
         this.password = hash_password;
-        
     }
 
-    next()
+    next();
 })
-
-const regModel = mongoose.model('Registered_User',User_schema);
+const regModel = mongoose.model('saved_user',RegSchema);
 
 module.exports = regModel;
