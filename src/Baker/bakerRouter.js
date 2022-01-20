@@ -73,4 +73,21 @@ router.post('/baker/login',async(req, res)=>{
     }
 })
 
+router.post('/baker/delete/:id',async(req, res) => {
+    try {
+      const id = req.params.id;
+      const deleted = await Reg.findByIdAndDelete(id);
+      if (deleted) {
+        res.status(200).json({message: 'Deleted successfully'});
+      }
+      else{
+        res.status(404).json({message: 'Deletation Failed'});
+      }
+  
+    }
+    catch (err) {
+      console.log(err);
+    }
+  })
+
 module.exports = router

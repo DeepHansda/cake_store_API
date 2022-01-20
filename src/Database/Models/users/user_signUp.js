@@ -7,6 +7,9 @@ const RegSchema =mongoose.Schema({
        type: String,
        unique: true
     },
+    phone:{type:Number,
+    unique: true
+},
     address:String,
     password:String,
     time:{type:Date, default:Date.now}

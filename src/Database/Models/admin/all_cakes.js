@@ -15,9 +15,11 @@ const CakeSchema = mongoose.Schema(
       type: String,
     },
     images:{
-      img:{
-        type: String,
-      }
+      type: Array
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now()
     }
   });
 

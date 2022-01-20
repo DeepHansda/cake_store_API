@@ -61,14 +61,8 @@ order_router.get('/user/findOrder/:id',async(req, res)=>{
 
 order_router.get('/user/getOrders',async(req, res)=>{
     try{
-        const findOrder =await User_order.find((err,data)=>{
-            if(err){
-                res.status(400).send(err)
-            }
-            else{
-                res.status(200).send(data)
-            }
-        }).sort("-createdAt")
+        const findOrder =await User_order.find().sort("-createdAt")
+        res.status(200).send(findOrder);
         
     }
     catch(err){

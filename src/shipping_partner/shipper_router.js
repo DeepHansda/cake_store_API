@@ -21,7 +21,7 @@ router.post("/shipper/signup", async (req, res) => {
   }
 });
 
-router.get("/shipper/getshipper", async (req, res) => {
+router.get("/shipper/getshippers", async (req, res) => {
   try {
     const getAll = await Reg.find((err, data) => {
       if (err) {
@@ -63,4 +63,20 @@ router.post("/shipper/login", async (req, res) => {
   }
 });
 
+router.post('/shipper/delete/:id',async(req, res) => {
+  try {
+    const id = req.params.id;
+    const deleted = await Reg.findByIdAndDelete(id);
+    if (deleted) {
+      res.status(200).json({message: 'Deleted successfully'});
+    }
+    else{
+      res.status(404).json({message: 'Deletation Failed'});
+    }
+
+  }
+  catch (err) {
+    console.log(err);
+  }
+})
 module.exports = router;

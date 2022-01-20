@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const mongoo_uri = 'mongodb://localhost:27017/cakee_it';
+const dotenv = require('dotenv');
+dotenv.config()
+const mongoo_uri ='mongodb://localhost:27017/cakee_it';
+//  process.env.MONGO_URL
 const mongo_params ={
     useNewUrlParser:true,
     useUnifiedTopology:true,
