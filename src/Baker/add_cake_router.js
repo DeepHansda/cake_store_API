@@ -1,50 +1,26 @@
 const cake_router = new require('express').Router();
-const multer = require('multer');
 const Add_Cake_Model = require('../Database/Models/admin/all_cakes');
+const upload = require('../middleware/FileUpload')
 
-const storage = multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,'../uploaded_images')
-    },
-    filename :(req,file,cb)=>{
-        const match = ["image/png", "image/jpeg"];
-        if(match.indexOf(file.mimetype) === -1){
-            var message = `${file.originalname} is not a valid file, only accept png/jpeg`
-            return cb(null, message);
-        }
-        else{
-            var filename = `$bakerImg/{Date.now} cakee it ${file.originalname}`
-            cb(null,filename)
-        }
-        
-    }
-})
 
-const upload = multer({
-    storage:storage,
-   
-})
-
-cake_router.post('/admin/addCake',upload.array('files',5),async(req, res)=>{
+cake_router.post('/admin/addCake',upload.array('images',5),async(req, res)=>{
     try{
-        // await upload(req, res,(err)=>{
-        //     if(err){
-        //         console.log(err),
-        //         res.status(400).json({message:err})
-        //     }
-        //     else{
-        //         if(req.file==undefined){
-        //             res.status(400).json({message:'no images selectead'})
-        //         }
-        //         res.status(200).json({
-        //             message:"file uploaded",
-        //             file:req.file
-        //         })
-        //     }
-        // })
-        console.log(req.files)
-        // console.log(err)
-        const cakeData = new Add_Cake_Model(req.body);
+        let filesArray = [];
+        req.files.forEach(element => {
+            const file = {
+                fileName: element.filename,
+                filePath: element.path,
+                fileType: element.mimetype,
+            }
+            filesArray.push(file);
+        });
+        const cakeData = new Add_Cake_Model({
+            cake_name: req.body.cake_name,
+            cake_description:req.body.cake_description,
+            weight:req.body.weight,
+            price:req.body.price,
+            images:filesArray
+        });
         const savedCakeData = await cakeData.save();
         res.status(200).send(savedCakeData)
     }
