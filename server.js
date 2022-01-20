@@ -27,7 +27,7 @@ app.use(cake_add_router,admin_auth,user_data,order_router,baker_router,shipper_r
 
 
 app.get('/', (req, res) => {
-    res.status(200).render('hello world')
+    res.status(200).send('hello world')
     console.log(req.cookies.accessToken)
 })
 
