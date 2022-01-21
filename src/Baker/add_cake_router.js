@@ -3,7 +3,7 @@ const Add_Cake_Model = require('../Database/Models/admin/all_cakes');
 const upload = require('../middleware/FileUpload')
 
 
-cake_router.post('/admin/addCake',upload.array('images',5),async(req, res)=>{
+cake_router.post('/admin/addCake',upload.array('images',5),async(req, res,err)=>{
     try{
         let filesArray = [];
         req.files.forEach(element => {
@@ -18,14 +18,21 @@ cake_router.post('/admin/addCake',upload.array('images',5),async(req, res)=>{
             cake_name: req.body.cake_name,
             cake_description:req.body.cake_description,
             weight:req.body.weight,
+            mobile_number:req.body.mobile_number,
             price:req.body.price,
             images:filesArray
         });
         const savedCakeData = await cakeData.save();
-        res.status(200).send(savedCakeData)
+        res.status(200).json({
+            message: 'Success',
+            status: 'ok'
+        })
+        if(err)
+        res.status(400).send(err);
+
     }
     catch(err){
-        res.status(500).send(err.message);
+        res.status(400).send(err);
         console.log(err)
     }
 })
@@ -40,7 +47,7 @@ cake_router.patch('/admin/editCake/:id',async(req, res)=>{
         res.status(200).send(putProduct)
     }
     catch(err){
-        res.status(500).send(err.message);
+        res.status(400).send(err);
         console.log(err)
     }
 })

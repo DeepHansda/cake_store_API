@@ -14,6 +14,9 @@ const CakeSchema = mongoose.Schema(
     price: {
       type: String,
     },
+    mobile_number:{
+      type:Number
+    },
     images:{
       type: Array
     },
